@@ -21,7 +21,7 @@ from siteuser.settings import (
 )
 
 
-# 注册，登录，退出等都通过 ajax 的方式进行
+# 注册，登录，退出等都通过弹出窗口和 ajax 的方式进行
 
 EMAIL_PATTERN = re.compile('^.+@.+\..+$')
 
@@ -37,6 +37,12 @@ def inner_accout_guard(func):
                 'msg': '禁止此操作'
             }
             return HttpResponse(json.dumps(ret_data), mimetype='application/json')
+        if request.siteuser:
+            ret_data = {
+                'ok': False,
+                'msg': '你已经登录'
+            }
+            return HttpResponse(json.dumps(ret_data), mimetype='application/json')
 
         try:
             func(request, *args, **kwargs)
@@ -49,6 +55,7 @@ def inner_accout_guard(func):
 
         return HttpResponse(json.dumps({'ok': True}), mimetype='application/json')
     return deco
+
 
 
 @inner_accout_guard
@@ -69,8 +76,6 @@ def login(request):
 
     # done
     request.session['uid'] = user.user.id
-
-
 
 
 @inner_accout_guard
@@ -138,7 +143,7 @@ def social_login_callback(request, sitename):
         user = SocialUser.objects.create(
             site_uid=site.uid,
             site_name=site.site_name,
-            username=site.username,
+            username=site.name,
             avatar_url=site.avatar
         )
         

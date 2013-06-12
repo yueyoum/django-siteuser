@@ -5,9 +5,9 @@ from django.conf.urls import patterns, url
 from siteuser.users import views
 
 urlpatterns = patterns('',
-    url(r'account/login/?$', views.login),
-    url(r'account/register/?$', views.register),
-    url(r'account/logout/?$', views.logout),
+    url(r'siteuser/login/$', views.login, name='siteuser_login'),
+    url(r'siteuser/register/$', views.register, name='siteuser_register'),
+    url(r'siteuser/logout/$', views.logout, name='siteuser_logout'),
     url(r'account/settings/?$', views.account_settings),
     url(r'account/oauth/(?P<sitename>\w+)/?$', views.social_login_callback),
 )

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if users %}
+    <table class="table table-bordered">
+        <thead>
+            <tr><td>uid</td><td>第三方帐号</td><td>名字</td><td>头像</td><td>当前登录用户</td></tr>
+        </thead>
+        {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>
+                    {% if u.social %}
+                        {{ u.social }}
+                    {% else %}
+                        <i class="icon-remove"></i>
+                    {% endif %}
+                </td>
+                <td>{{ u.username }}</td>
+                <td>
+                    <div style="width:50px; height:50px;">
+                    {% if u.avatar %}
+                        <img src="{{ u.avatar }}" />
+                    {% else %}
+                        <i class="icon-ban-circle"></i>
+                    {% endif %}
+                    </div>
+                </td>
+                <td>
+                    {% if u.current %}
+                        <i class="icon-ok"></i>
+                    {% else %}
+                        <i class="icon-remove"></i>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <h2>No users</h2>
+    {% endif %}
+    <hr />
+    <h1>
+        {% if request.siteuser %}
+            <a href="#" id="siteuserLogout">Logout</a>
+        {% else %}
+            <a href="{% url "login" %}">Login</a>
+            <a href="{% url "register" %}">Register</a>
+        {% endif %}
+    </h1>
+{% endblock  %}

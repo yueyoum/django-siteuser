@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Django Siteuser</title>
+        
+        <script type="text/javascript" src="{{ STATIC_URL }}jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/siteuser.js"></script>
+        <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        
+        {% block css %}
+        {% endblock %}
+        
+        
+        {% block js %}
+        {% endblock %}
+    </head>
+    
+    <body>
+        <div style="width: 940px; margin: 30px auto;">
+        {% block content %}
+        {% endblock %}
+        </div>
+    </body>
+</html>

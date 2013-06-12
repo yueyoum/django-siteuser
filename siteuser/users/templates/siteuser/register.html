@@ -1,0 +1,19 @@
+{% extends "siteuser/base.html" %}
+
+{% block siteuserform %}
+    <form>{% csrf_token %}
+        <fieldset>
+            <label>电子邮件</label>
+            <input id="siteuserRegEmail" type="text" placeholder="电子邮件">
+            <label>用户名</label>
+            <input id="siteuserRegUsername" type="text" placeholder="用户名">
+            <label>密码</label>
+            <input id="siteuserRegPassword" type="password" placeholder="密码">
+            <label>重复密码</label>
+            <input id="siteuserRegPassword2" type="password" placeholder="重复密码">
+            <button id="siteuserRegister" type="submit" class="btn" referer={{ request.META.HTTP_REFERER }}>注册</button>
+        </fieldset>
+    </form>
+    <div id="siteuserRegisterWarning" class="alert alert-error" style="display: none;">
+    </div>
+{% endblock %}

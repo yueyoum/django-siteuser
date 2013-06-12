@@ -1,0 +1,15 @@
+{% extends "siteuser/base.html" %}
+
+{% block siteuserform %}
+    <form>{% csrf_token %}
+        <fieldset>
+            <label>电子邮件</label>
+            <input id="siteuserLoginEmail" type="text" placeholder="电子邮件">
+            <label>密码</label>
+            <input id="siteuserLoginPassword" type="password" placeholder="密码">
+            <button id="siteuserLogin" class="btn" referer={{ request.META.HTTP_REFERER }}>登录</button>
+        </fieldset>
+    </form>
+    <div id="siteuserLoginWarning" class="alert alert-error" style="display: none;">
+    </div>
+{% endblock %}

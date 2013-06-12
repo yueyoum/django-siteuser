@@ -18,7 +18,7 @@ from siteuser.settings import (
     AVATAR_RESIZE_SIZE,
     AVATAR_SAVE_FORMAT,
     AVATAR_SAVE_QUALITY,
-    AVATAR_DELETE_ORIGIN_AFTER_CROP,
+    AVATAR_DELETE_ORIGINAL_AFTER_CROP,
 )
 
 from siteuser.upload_avatar.signals import avatar_upload_done, avatar_crop_done
@@ -162,7 +162,7 @@ def crop_avatar(request):
                           dispatch_uid = 'siteuser_avatar_crop_done'
                           )
 
-    if AVATAR_DELETE_ORIGIN_AFTER_CROP:
+    if AVATAR_DELETE_ORIGINAL_AFTER_CROP:
         upim.delete()
 
     return HttpResponse(
