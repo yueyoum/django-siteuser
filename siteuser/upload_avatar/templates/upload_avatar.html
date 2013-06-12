@@ -1,0 +1,41 @@
+<div id="uploadAvatar">
+    <link rel="stylesheet" href="{{ STATIC_URL }}imgareaselect/css/imgareaselect-default.css" type="text/css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}imgareaselect/jquery.imgareaselect.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/upload_avatar.min.js"></script>
+    
+    <form id="uploadAvatarCropForm" action="{% url 'uploadavatar_crop' %}" method="post" target="uploadAvatarIframe" style="display: none;">
+        {% csrf_token %}
+        <input id="uploadAvatarValueX1" type="text" name="x1"/>
+        <input id="uploadAvatarValueY1" type="text" name="y1"/>
+        <input id="uploadAvatarValueX2" type="text" name="x2"/>
+        <input id="uploadAvatarValueY2" type="text" name="y2"/>
+    </form>
+    
+    
+    
+    <div id="uploadAvatarUploadArea">
+        <form id="uploadAvatarForm" action="{% url 'uploadavatar_upload' %}" method="post" target="uploadAvatarIframe" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div id="uploadAvatarBtnLayout">
+                <button>选择图片</button>
+                <input type="file" id="uploadAvatarInputFile" name="uploadavatarfile" />
+            </div>
+        </form>
+    </div>
+    <iframe id="uploadAvatarIframe" name="uploadAvatarIframe" style="display: none;"></iframe>
+    
+    <div id="uploadAvatarSelectArea"></div>
+    <div id="uploadAvatarPreviewArea">
+        <p>预览</p>
+        <div id="uploadAvatarPreviewArea50"></div>
+        <div id="uploadAvatarPreviewArea120"></div>
+    </div>
+    
+    <div style="clear: both;"></div>
+    
+    <div id="uploadAvatarBtns">
+        <button id="uploadAvatarCropSubmit" disabled="disabled">保存</button>
+    </div>
+    
+    <div id="uploadAvatarCropResult"></div>
+</div>

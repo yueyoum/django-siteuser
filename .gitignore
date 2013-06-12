@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.bak
+*.db
+
+local_settings.py
+env
+avatar
