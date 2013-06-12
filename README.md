@@ -56,6 +56,7 @@
     
     支持两种方式来扩展SiteUser字段
     *   直接在`settings.py`中定义
+    
         ```python
         # project settings.py
         from django.db import models
