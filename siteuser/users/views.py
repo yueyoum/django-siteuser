@@ -5,11 +5,8 @@ import hashlib
 from functools import wraps
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 
 from socialoauth import SocialSites, SocialAPIError, SocialSitesConfigError
-
 
 from siteuser.users.models import InnerUser, SiteUser, SocialUser
 from siteuser.settings import (
@@ -21,7 +18,7 @@ from siteuser.settings import (
 )
 
 
-# 注册，登录，退出等都通过弹出窗口和 ajax 的方式进行
+# 注册，登录，退出等都通过 ajax 的方式进行
 
 EMAIL_PATTERN = re.compile('^.+@.+\..+$')
 
@@ -104,7 +101,7 @@ def register(request):
 
     passwd = hashlib.sha1(passwd).hexdigest()
     user = InnerUser.objects.create(email=email, passwd=passwd, username=username)
-    request.session['uid'] = user.id
+    request.session['uid'] = user.user.id
 
     # finish
 
@@ -118,10 +115,10 @@ def logout(request):
     return HttpResponse('', mimetype='application/json')
 
 
-def account_settings(request):
-    if not request.siteuser:
-        return HttpResponseRedirect('/')
-    return render_to_response('account_settings.html', context_instance=RequestContext(request))
+def reset_passwd(request):
+    pass
+
+
 
 
 def social_login_callback(request, sitename):
@@ -138,7 +135,7 @@ def social_login_callback(request, sitename):
     
     try:
         user = SocialUser.objects.get(site_uid=site.uid, site_name=site.site_name)
-        SiteUser.objects.filter(id=user.id).update(username=site.username, avatar_url=site.avatar)
+        SiteUser.objects.filter(id=user.id).update(username=site.name, avatar_url=site.avatar)
     except SocialUser.DoesNotExist:
         user = SocialUser.objects.create(
             site_uid=site.uid,

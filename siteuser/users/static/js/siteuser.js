@@ -1,9 +1,7 @@
 (function(window, $){
     $(function(){
         $('#siteuserLogin').click(function(e){
-            console.log('xxclicked...');
             e.preventDefault();
-            console.log('clicked...');
             var email, passwd, referer;
             email = $('#siteuserLoginEmail').val();
             passwd = $('#siteuserLoginPassword').val();

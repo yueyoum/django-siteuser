@@ -58,7 +58,7 @@ def upload_avatar(request):
     except KeyError:
         raise UploadAvatarError('请正确上传图片')
 
-    if uploaded_file.size > AVATAR_UPLOAD_MAX_SIZE:
+    if uploaded_file.size > AVATAR_UPLOAD_MAX_SIZE * 1024 * 1024:
         raise UploadAvatarError('图片不能大于{0}MB'.format(AVATAR_UPLOAD_MAX_SIZE))
 
     name, ext = os.path.splitext(uploaded_file.name)

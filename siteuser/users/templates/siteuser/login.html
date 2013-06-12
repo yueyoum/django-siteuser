@@ -7,9 +7,8 @@
             <input id="siteuserLoginEmail" type="text" placeholder="电子邮件">
             <label>密码</label>
             <input id="siteuserLoginPassword" type="password" placeholder="密码">
-            <button id="siteuserLogin" class="btn" referer={{ request.META.HTTP_REFERER }}>登录</button>
         </fieldset>
+        <button id="siteuserLogin" class="btn" referer={{ request.META.HTTP_REFERER }}>登录</button>
     </form>
-    <div id="siteuserLoginWarning" class="alert alert-error" style="display: none;">
-    </div>
+    <div id="siteuserLoginWarning" class="alert alert-error" style="display: none;"></div>
 {% endblock %}

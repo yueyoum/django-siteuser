@@ -42,6 +42,9 @@
     <hr />
     <h1>
         {% if request.siteuser %}
+            {% if not request.siteuser.is_social %}
+            <a href="{% url "account_settings" %}">Settings</a>
+            {% endif %}
             <a href="#" id="siteuserLogout">Logout</a>
         {% else %}
             <a href="{% url "login" %}">Login</a>

@@ -21,13 +21,14 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(EXAMPLE_PATH, 'test.db'),
+        'ENGINE': 'django.db.backends.mysql',
+        #'NAME': os.path.join(EXAMPLE_PATH, 'test.db'),
+        'NAME': 'siteuser',
         # The following settings are not used with sqlite3:
-        'USER': '',
+        'USER': 'root',
         'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -182,6 +183,8 @@ LOGGING = {
 
 
 AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'avatar')
+
+SITEUSER_EXTEND_MODEL = 'app.siteuser_extend.SiteUserExtend'
 
 try:
     from local_settings import *

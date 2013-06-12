@@ -3,14 +3,9 @@
 "use strict";
 
 $(function () {
-    $('#uploadAvatarBtnLayout button').click(function () {
-        return false;
-    });
-    var input_width, input_height, img_obj, p, fileanme, x1, y1, x2, y2;
-    input_width = $('#uploadAvatarBtnLayout').width();
-    input_height = $('#uploadAvatarBtnLayout').height();
+    var img_obj, p, fileanme, x1, y1, x2, y2;
 
-    $('#uploadAvatarInputFile').css({opacity: 0}).width(input_width + 50).height(input_height).change(function () {
+    $('#uploadAvatarInputFile').change(function () {
         if ($(this).val() === "") { return; }
         var $last_img = $('#uploadAvatarSelectArea img');
         if ($last_img.length) {
@@ -92,7 +87,7 @@ function upload_avatar_success(image_url) {
     $('#uploadAvatarSelectArea').empty();
     $('#uploadAvatarPreviewArea div').empty();
     $('#uploadAvatarPreviewArea div').append('<img />');
-    $('#uploadAvatarPreviewArea div img').attr('src', image_url);
+    $('#uploadAvatarPreviewArea div img').attr('src', image_url).css('max-width', 'none');
 
     $('#uploadAvatarSelectArea').append('<img />');
     $('#uploadAvatarSelectArea img').attr('src', image_url).load(function () {

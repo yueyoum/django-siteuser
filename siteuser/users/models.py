@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+import time
+import hashlib
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.conf import settings
+from django.utils.crypto import get_random_string
 
 from siteuser.settings import (
     MAX_EMAIL_LENGTH,
@@ -22,6 +25,7 @@ class SiteUserManager(models.Manager):
             siteuser_kwargs = {
                 'is_social': is_social,
                 'username': kwargs.pop('username'),
+                'date_joined': timezone.now(),
             }
             if 'avatar_url' in kwargs:
                 siteuser_kwargs['avatar_url'] = kwargs.pop('avatar_url')
@@ -42,6 +46,7 @@ class InnerUserManager(SiteUserManager):
 
 
 class SocialUser(models.Model):
+    """第三方帐号"""
     user = models.OneToOneField('SiteUser', related_name='social_user')
     site_uid = models.CharField(max_length=128)
     site_name = models.CharField(max_length=32)
@@ -53,12 +58,19 @@ class SocialUser(models.Model):
 
 
 class InnerUser(models.Model):
+    """自身注册用户"""
     user = models.OneToOneField('SiteUser', related_name='inner_user')
     email = models.CharField(max_length=MAX_EMAIL_LENGTH, unique=True)
     passwd = models.CharField(max_length=40)
     token = models.CharField(max_length=40, blank=True)
 
     objects = InnerUserManager()
+    
+    def generate_token(self):
+        key = '{0}{1}'.format(get_random_string(), time.time())
+        token = hashlib.sha1(key).hexdegist()
+        self.token = token
+        return token
 
 
 
@@ -78,9 +90,11 @@ def _siteuser_extend():
     _module = '.'.join(_model_items[:-1])
     _model = _model_items[-1]
     try:
-        _model = __import__(_module, fromlist=['.'])._model
+        m = __import__(_module, fromlist=['.'])
+        _model = getattr(m, _model)
     except:
-        _model = __import__(_module + '.models', fromlist=['.'])._model
+        m = __import__(_module + '.models', fromlist=['.'])
+        _model = getattr(m, _model)
     
     if not _model._meta.abstract:
         raise AttributeError("%s must be an abstract model" % siteuser_extend_model)
@@ -89,9 +103,12 @@ def _siteuser_extend():
 
 
 class SiteUser(_siteuser_extend()):
+    """用户信息，如果需要（大部分情况也确实是需要）扩展SiteUser的字段，
+    需要定义SITEUSER_EXTEND_MODEL.此model必须设置 abstract=True
+    """
     is_social = models.BooleanField()
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now())
+    date_joined = models.DateTimeField()
 
     username = models.CharField(max_length=MAX_USERNAME_LENGTH, db_index=True)
     # avatar_url for social user
