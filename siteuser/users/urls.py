@@ -8,6 +8,5 @@ urlpatterns = patterns('',
     url(r'siteuser/login/$', views.login, name='siteuser_login'),
     url(r'siteuser/register/$', views.register, name='siteuser_register'),
     url(r'siteuser/logout/$', views.logout, name='siteuser_logout'),
-    url(r'account/settings/?$', views.account_settings),
     url(r'account/oauth/(?P<sitename>\w+)/?$', views.social_login_callback),
 )
