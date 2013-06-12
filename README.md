@@ -31,6 +31,11 @@
 
 ## 如何使用
 
+*   引入必要的js文件
+    ```html
+    <script type="text/javascript" src="{{ STATIC_URL }}js/siteuser.js"></script>
+    ```
+
 *   将 `siteuser` 加入到 `INSTALLED_APPS` 中
     ```python
     INSTALLED_APPS = (
@@ -49,18 +54,30 @@
     不设置此项，example一样可以运行，但实际项目中，肯定会根据项目本身来设定用户字段.
     默认的字段请查看 ![SiteUser](/siteuser/users/models.py).
     
-    支持两种方式来扩展SiteUser字段，一种是直接在settings.py中定义 `class SITEUSER_EXTEND_MODEL(models.Model)`,
-    第二种是将此model的定义写在其他文件中，然后在settings.py中指定。`example`使用的第二种，具体可以查看`example`项目.
+    支持两种方式来扩展SiteUser字段
+    *   直接在`settings.py`中定义
+        ```python
+        # project settings.py
+        from django.db import models
+        class SITEUSER_EXTEND_MODEL(models.Model):
+            # some fields...
+            class Meta:
+                abstract = True
+        ```
+
+    *   将此model的定义写在其他文件中，然后在settings.py中指定。
+    
+    `example`使用的第二种，具体可以查看`example`项目.
 
 
 最后还要做的是： siteuser 提供了登录，注册的template，但只是登录，注册form的模板，
-并且siteuser不知道如何将这个form模板嵌入到你的站点中，以及不知道还要传入什么额外的参数，
+并且siteuser不知道如何将这个form模板嵌入到你的站点中，以及不知道在渲染模板的时候还要传入什么额外的context，
 所以你需要在自己的项目`views.py`中写对应的方法，在`urls.py`添加对应的url，并且完成对应的模板。
 
 看起来工作量很大，其实最简单的情况下，你只用添加几行代码。
 url需要注意的是 不要用 `siteuser` 作为你定义的url开头。
 `view.py`中的方法很简单，基本上只用 `render_to_response`，
-而模板也只用 `{% include 'siteuser/login.html' %}`即可。（如果是注册，则include 'siteuser/register.html'）
+而模板也只用 `{% include 'siteuser/login.html' %}`即可。（如果是注册，则`include 'siteuser/register.html'`）
 
 具体可以参考`example`项目
 
