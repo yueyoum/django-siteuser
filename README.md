@@ -44,9 +44,10 @@
         'siteuser.upload_avatar',
     )
     ```
-
-*   将 `siteuser.context_processors.social_sites` 加入 `TEMPLATE_CONTEXT_PROCESSORS`
-*   将 `siteuser.middleware.User` 加入 `MIDDLEWARE_CLASSES`
+*   将 `siteuser.SITEUSER_TEMPLATE` 加入 `TEMPLATE_DIRS`
+    注意： 这里不是字符串，所以你需要在`settings.py` 文件中 先 `import siteuser`
+*   将 `'siteuser.context_processors.social_sites'` 加入 `TEMPLATE_CONTEXT_PROCESSORS`
+*   将 `'siteuser.middleware.User'` 加入 `MIDDLEWARE_CLASSES`
 *   将 `url(r'', include('siteuser.urls'))` 加入到项目的 `urls.py` 
 *   `AVATAR_DIR` - 告诉siteuser将上传的头像放置到哪个位置
 *   `SOCIALOAUTH_SITES` - 第三方登录所需的配置。![见socialoauth文档](https://github.com/yueyoum/social-oauth/blob/master/doc.md#-settingspy)
@@ -70,15 +71,41 @@
     
     `example`使用的第二种，具体可以查看`example`项目.
 
+*   `SITEUSER_ACCOUNT_MIXIN`
+    siteuser 提供了登录，注册的template，但只是登录，注册form的模板，
+    并且siteuser不知道如何将这个form模板嵌入到你的站点中，以及不知道在渲染模板的时候还要传入什么额外的context，
+    所以你需要在自己定义这个设置。
+    
+    与 `SITEUSER_EXTEND_MODEL` 一样，同样有两种方法定义，
+    *   直接在 `settings.py` 中定义
+    
+        ```python
+        class SITEUSER_ACCOUNT_MIXIN(object):
+            login_template = 'login.html'           # 你项目的登录页面模板
+            register_template = 'register.html'     # 你项目的注册页面模板
+            
+            def get_login_context(self, request):
+                return {}
+                
+            def get_register_context(self, request):
+                return {}
+        ```
+        
+        这两个方法正如其名，request是django传递给view的request，你在这里返回需要传递到模板中的context即可
+        
+    *   第二中方法是将此Mixin定义在一个文件中，然后在settings.py中指定
+    
+    `example`使用的第二种，具体可以查看`example`项目.
 
-最后还要做的是： siteuser 提供了登录，注册的template，但只是登录，注册form的模板，
-并且siteuser不知道如何将这个form模板嵌入到你的站点中，以及不知道在渲染模板的时候还要传入什么额外的context，
-所以你需要在自己的项目`views.py`中写对应的方法，在`urls.py`添加对应的url，并且完成对应的模板。
 
-看起来工作量很大，其实最简单的情况下，你只用添加几行代码。
-url需要注意的是 不要用 `siteuser` 作为你定义的url开头。
-`view.py`中的方法很简单，基本上只用 `render_to_response`，
-而模板也只用 `{% include 'siteuser/login.html' %}`即可。（如果是注册，则`include 'siteuser/register.html'`）
+#### 模板
+
+你需要自己完成 login.html, register.html, account_settings.html 模板。（名字可以自己取，只要在代码中
+等对应起来就行），你只需要干一件事情，就是在你的模板的 `include` 相应的siteuser模板即可。
+
+比如 login.html 中在你定义的位置 `{% include 'siteuser/login.html' %}`,
+
+account_settings.html 中 `{% include 'siteuser/upload_avatar.html' %}`
 
 具体可以参考`example`项目
 
