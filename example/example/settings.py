@@ -181,10 +181,10 @@ LOGGING = {
 }
 
 
-
 AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'avatar')
 
-SITEUSER_EXTEND_MODEL = 'app.siteuser_extend.SiteUserExtend'
+SITEUSER_ACCOUNT_MIXIN = 'app.siteuser_custom.AccountMixIn'
+SITEUSER_EXTEND_MODEL = 'app.siteuser_custom.SiteUserExtend'
 
 try:
     from local_settings import *

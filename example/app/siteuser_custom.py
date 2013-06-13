@@ -6,3 +6,8 @@ class SiteUserExtend(models.Model):
 
     class Meta:
         abstract = True
+
+
+class AccountMixIn(object):
+    login_template = 'login.html'
+    register_template = 'register.html'

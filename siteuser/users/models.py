@@ -86,9 +86,7 @@ def _siteuser_extend():
         return siteuser_extend_model
 
     # 以string的方式定义的 SITEUSER_EXTEND_MODEL
-    _model_items = siteuser_extend_model.split('.')
-    _module = '.'.join(_model_items[:-1])
-    _model = _model_items[-1]
+    _module, _model = siteuser_extend_model.rsplit('.', 1)
     try:
         m = __import__(_module, fromlist=['.'])
         _model = getattr(m, _model)

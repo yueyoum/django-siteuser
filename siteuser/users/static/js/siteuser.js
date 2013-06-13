@@ -16,7 +16,7 @@
             $.ajax(
                 {
                     type: 'POST',
-                    url: '/siteuser/login/',
+                    url: '/account/login/',
                     data: {
                         email: email,
                         passwd: passwd,
@@ -76,7 +76,7 @@
             $.ajax(
                 {
                     type: 'POST',
-                    url: '/siteuser/register/',
+                    url: '/account/register/',
                     data: {
                         email: email,
                         username: username,
@@ -111,7 +111,7 @@
             $.ajax(
                 {
                     type: 'GET',
-                    url: '/siteuser/logout/',
+                    url: '/account/logout/',
                     async: false,
                     success: function(data){
                         window.location.reload();
