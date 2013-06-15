@@ -12,3 +12,4 @@ class AccountMixIn(object):
     login_template = 'login.html'
     register_template = 'register.html'
     reset_passwd_template = 'reset_password.html'
+    change_passwd_template = 'change_password.html'

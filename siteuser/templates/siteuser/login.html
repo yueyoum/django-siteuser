@@ -8,7 +8,7 @@
             <label>密码</label>
             <input id="siteuserLoginPassword" type="password" placeholder="密码">
         </fieldset>
-        <button id="siteuserLogin" class="btn" referer={{ request.META.HTTP_REFERER }}>登录</button>
+        <button id="siteuserLogin" class="btn" referer={{ referer }}>登录</button>
     </form>
     <div id="siteuserLoginWarning" class="alert alert-error" style="display: none;"></div>
     <p><a href="{% url 'siteuser_reset_step1' %}">忘记密码？</a></p>

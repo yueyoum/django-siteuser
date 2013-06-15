@@ -32,6 +32,7 @@ EMAIL_PATTERN = re.compile('^.+@.+\..+$')
 class InnerAccoutError(Exception):
     pass
 
+make_password = lambda passwd: hashlib.sha1(passwd).hexdigest()
 
 def inner_account_ajax_guard(func):
     @wraps(func)
@@ -68,9 +69,11 @@ def inner_account_http_guard(func):
 
 
 class SiteUserMixIn(object):
+    """用户可以自定义 SITEUSER_ACCOUNT_MIXIN 来覆盖这些配置"""
     login_template = 'siteuser/login.html'
     register_template = 'siteuser/register.html'
     reset_passwd_template = 'siteuser/reset_password.html'
+    change_passwd_template = 'siteuser/change_password.html'
     sign_key = 'siteuser_signkey'
     reset_passwd_email_title = u'重置密码'
     reset_passwd_email_template = 'siteuser/reset_password_email.html'
@@ -83,6 +86,9 @@ class SiteUserMixIn(object):
         return {}
 
     def get_reset_passwd_context(self, request):
+        return {}
+
+    def get_change_passwd_context(self, request):
         return {}
 
     def get(self, request, *args, **kwargs):
@@ -105,6 +111,12 @@ class SiteUserMixIn(object):
             'expired': False,
         }
 
+    def _normalize_referer(self, request):
+        referer = request.META.get('HTTP_REFERER', '/')
+        if referer.endswith('done/'):
+            referer = '/'
+        return referer
+
 
 class UserNotDefined(object):pass
 
@@ -114,17 +126,23 @@ def user_defined_mixin():
         raise AttributeError("Invalid SITEUSER_ACCOUNT_MIXIN")
     if isinstance(mixin, type):
         return mixin
-    
+
     _module, _class = mixin.rsplit('.', 1)
     m = __import__(_module, fromlist=['.'])
     return getattr(m, _class)
 
 
 class SiteUserLoginView(user_defined_mixin(), SiteUserMixIn, View):
+    """登录"""
     def __init__(self, **kwargs):
         self.tpl = self.login_template
         self.ctx_getter = self.get_login_context
         super(SiteUserLoginView, self).__init__(**kwargs)
+
+    def get_login_context(self, request):
+        ctx = super(SiteUserLoginView, self).get_login_context(request)
+        ctx['referer'] = self._normalize_referer(request)
+        return ctx
 
     @inner_account_ajax_guard
     def post(self, request, *args, **kwargs):
@@ -146,10 +164,16 @@ class SiteUserLoginView(user_defined_mixin(), SiteUserMixIn, View):
 
 
 class SiteUserRegisterView(user_defined_mixin(), SiteUserMixIn, View):
+    """注册"""
     def __init__(self, **kwargs):
         self.tpl = self.register_template
         self.ctx_getter = self.get_register_context
         super(SiteUserRegisterView, self).__init__(**kwargs)
+
+    def get_register_context(self, request):
+        ctx = super(SiteUserRegisterView, self).get_register_context(request)
+        ctx['referer'] = self._normalize_referer(request)
+        return ctx
 
     @inner_account_ajax_guard
     def post(self, request, *args, **kwargs):
@@ -175,12 +199,13 @@ class SiteUserRegisterView(user_defined_mixin(), SiteUserMixIn, View):
         if SiteUser.objects.filter(username=username).exists():
             raise InnerAccoutError('用户名已存在')
 
-        passwd = hashlib.sha1(passwd).hexdigest()
+        passwd = make_password(passwd)
         user = InnerUser.objects.create(email=email, passwd=passwd, username=username)
         request.session['uid'] = user.user.id
 
 
 class SiteUserResetPwStepOneView(user_defined_mixin(), SiteUserMixIn, View):
+    """丢失密码重置第一步，填写注册时的电子邮件"""
     def __init__(self, **kwargs):
         self.tpl = self.reset_passwd_template
         self.ctx_getter = self.get_reset_passwd_context
@@ -215,6 +240,7 @@ class SiteUserResetPwStepOneView(user_defined_mixin(), SiteUserMixIn, View):
 
 
 class SiteUserResetPwStepOneDoneView(user_defined_mixin(), SiteUserMixIn, View):
+    """发送重置邮件完成"""
     def __init__(self, **kwargs):
         self.tpl = self.reset_passwd_template
         self.ctx_getter = self.get_reset_passwd_context
@@ -224,6 +250,7 @@ class SiteUserResetPwStepOneDoneView(user_defined_mixin(), SiteUserMixIn, View):
 
 
 class SiteUserResetPwStepTwoView(user_defined_mixin(), SiteUserMixIn, View):
+    """丢失密码重置第二步，填写新密码"""
     def __init__(self, **kwargs):
         self.tpl = self.reset_passwd_template
         self.ctx_getter = self.get_reset_passwd_context
@@ -252,12 +279,13 @@ class SiteUserResetPwStepTwoView(user_defined_mixin(), SiteUserMixIn, View):
         if password != password1:
             raise InnerAccoutError('两次密码不一致')
         uid = signing.loads(kwargs['token'], key=self.sign_key)
-        password = hashlib.sha1(password).hexdigest()
+        password = make_password(password)
         InnerUser.objects.filter(user_id=uid).update(passwd=password)
         return HttpResponseRedirect(reverse('siteuser_reset_step2_done'))
 
 
 class SiteUserResetPwStepTwoDoneView(user_defined_mixin(), SiteUserMixIn, View):
+    """重置完成"""
     def __init__(self, **kwargs):
         self.tpl = self.reset_passwd_template
         self.ctx_getter = self.get_reset_passwd_context
@@ -266,6 +294,62 @@ class SiteUserResetPwStepTwoDoneView(user_defined_mixin(), SiteUserMixIn, View):
         super(SiteUserResetPwStepTwoDoneView, self).__init__(**kwargs)
 
 
+class SiteUserChangePwView(user_defined_mixin(), SiteUserMixIn, View):
+    """已登录用户修改密码"""
+    def render_to_response(self, request, **kwargs):
+        ctx = self.get_change_passwd_context(request)
+        ctx['done'] = False
+        ctx.update(kwargs)
+        return render_to_response(
+            self.change_passwd_template,
+            ctx,
+            context_instance=RequestContext(request)
+        )
+
+    def get(self, request, *args, **kwargs):
+        if not request.siteuser:
+            return HttpResponseRedirect('/')
+        if not request.siteuser.is_active or request.siteuser.is_social:
+            return HttpResponseRedirect('/')
+        return self.render_to_response(request)
+
+    def post(self, request, *args, **kwargs):
+        if not request.siteuser:
+            return HttpResponseRedirect('/')
+        if not request.siteuser.is_active or request.siteuser.is_social:
+            return HttpResponseRedirect('/')
+
+        password = request.POST.get('password', None)
+        password1 = request.POST.get('password1', None)
+        if not password or not password1:
+            return self.render_to_response(request, error_msg='请填写新密码')
+        if password != password1:
+            return self.render_to_response(request, error_msg='两次密码不一致')
+        password = make_password(password)
+        if request.siteuser.inner_user.passwd == password:
+            return self.render_to_response(request, error_msg='不能与旧密码相同')
+        InnerUser.objects.filter(user_id=request.siteuser.id).update(passwd=password)
+        # 清除登录状态
+        try:
+            del request.session['uid']
+        except:
+            pass
+
+        return HttpResponseRedirect(reverse('siteuser_changepw_done'))
+
+
+class SiteUserChangePwDoneView(user_defined_mixin(), SiteUserMixIn, View):
+    """已登录用户修改密码成功"""
+    def get(self, request, *args, **kwargs):
+        if request.siteuser:
+            return HttpResponseRedirect('/')
+        ctx = self.get_change_passwd_context(request)
+        ctx['done'] = True
+        return render_to_response(
+            self.change_passwd_template,
+            ctx,
+            context_instance=RequestContext(request)
+        )
 
 
 def logout(request):

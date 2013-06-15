@@ -2,5 +2,6 @@
 
 {% block content %}
     <a href="/">首页</a>
+    <a href="{% url 'siteuser_changepw' %}">修改密码</a>
     {% include "siteuser/upload_avatar.html" %}
 {% endblock %}
