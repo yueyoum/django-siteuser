@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-import time
-import hashlib
 
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 
 from siteuser.settings import (
     MAX_EMAIL_LENGTH,
@@ -62,16 +59,8 @@ class InnerUser(models.Model):
     user = models.OneToOneField('SiteUser', related_name='inner_user')
     email = models.CharField(max_length=MAX_EMAIL_LENGTH, unique=True)
     passwd = models.CharField(max_length=40)
-    token = models.CharField(max_length=40, blank=True)
 
     objects = InnerUserManager()
-    
-    def generate_token(self):
-        key = '{0}{1}'.format(get_random_string(), time.time())
-        token = hashlib.sha1(key).hexdegist()
-        self.token = token
-        return token
-
 
 
 def _siteuser_extend():

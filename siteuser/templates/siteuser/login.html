@@ -11,4 +11,5 @@
         <button id="siteuserLogin" class="btn" referer={{ request.META.HTTP_REFERER }}>登录</button>
     </form>
     <div id="siteuserLoginWarning" class="alert alert-error" style="display: none;"></div>
+    <p><a href="{% url 'siteuser_reset_step1' %}">忘记密码？</a></p>
 {% endblock %}
