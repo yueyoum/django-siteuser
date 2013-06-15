@@ -100,7 +100,7 @@
         ```
         
         这两个方法正如其名，request是django传递给view的request，你在这里返回需要传递到模板中的context即可
-        在这里查看默认的 ![SiteUserMixIn](/siteuser/users/view.py#L71)
+        在这里查看默认的 ![SiteUserMixIn](/siteuser/users/views.py#L71)
         
     *   第二中方法是将此Mixin定义在一个文件中，然后在settings.py中指定
     
