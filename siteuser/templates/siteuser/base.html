@@ -1,10 +1,11 @@
 <div class="siteuser">
-    <div class="row-fluid">
-        <div class="span6">
+    <div {% if social_sites %}class="row-fluid"{% endif %}>
+        <div {% if social_sites %}class="span6"{% endif %}>
             <div class="siteuserform">
             {% block siteuserform %}{% endblock %}
             </div>
         </div>
+        {% if social_sites %}
         <div class="span6">
             <div class="socialsites">
                 {% for s in social_sites %}
@@ -12,5 +13,6 @@
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
     </div>
 </div>

@@ -3,6 +3,7 @@
 from django.conf.urls import patterns, url
 
 from siteuser.users import views
+from siteuser.settings import USING_SOCIAL_LOGIN
 
 urlpatterns = patterns('',
     url(r'^account/login/$', views.SiteUserLoginView.as_view(), name='siteuser_login'),
@@ -14,5 +15,9 @@ urlpatterns = patterns('',
     url(r'^account/changepw/$', views.SiteUserChangePwView.as_view(), name='siteuser_changepw'),
     url(r'^account/changepw/done/$', views.SiteUserChangePwDoneView.as_view(), name='siteuser_changepw_done'),
     url(r'^account/logout/$', views.logout, name='siteuser_logout'),
-    url(r'^account/oauth/(?P<sitename>\w+)/?$', views.social_login_callback),
 )
+
+if USING_SOCIAL_LOGIN:
+    urlpatterns += patterns('',
+        url(r'^account/oauth/(?P<sitename>\w+)/?$', views.social_login_callback),
+    )

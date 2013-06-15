@@ -21,5 +21,7 @@ def social_sites(request):
             }
         socialsites = SocialSites(SOCIALOAUTH_SITES)
         return [make_site(site_class) for site_class in socialsites.list_sites_class()]
-    
-    return {'social_sites': LazyList(_social_sites)}
+
+    if SOCIALOAUTH_SITES:
+        return {'social_sites': LazyList(_social_sites)}
+    return {'social_sites': []}

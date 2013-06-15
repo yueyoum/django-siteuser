@@ -178,7 +178,7 @@ LOGGING = {
     }
 }
 
-
+USING_SOCIAL_LOGIN = True
 AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'avatar')
 
 SITEUSER_ACCOUNT_MIXIN = 'app.siteuser_custom.AccountMixIn'

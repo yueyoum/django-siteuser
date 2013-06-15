@@ -2,8 +2,14 @@
 import os
 from django.conf import settings
 
-### 第三方帐号登录 - 配置见soicaloauth文档和例子
-SOCIALOAUTH_SITES = settings.SOCIALOAUTH_SITES
+# 默认不打开第三方登录
+USING_SOCIAL_LOGIN = getattr(settings, 'USING_SOCIAL_LOGIN', False)
+
+if USING_SOCIAL_LOGIN:
+    ### 第三方帐号登录 - 配置见soicaloauth文档和例子
+    SOCIALOAUTH_SITES = settings.SOCIALOAUTH_SITES
+else:
+    SOCIALOAUTH_SITES = None
 
 ### 头像目录 - 需要在项目的settings.py中设置
 AVATAR_DIR = settings.AVATAR_DIR
