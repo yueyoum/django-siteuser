@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'app',
     'siteuser.users',
     'siteuser.upload_avatar',
+    'siteuser.notify',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -178,11 +179,13 @@ LOGGING = {
     }
 }
 
-USING_SOCIAL_LOGIN = True
+USING_SOCIAL_LOGIN = False
 AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'avatar')
 
 SITEUSER_ACCOUNT_MIXIN = 'app.siteuser_custom.AccountMixIn'
 SITEUSER_EXTEND_MODEL = 'app.siteuser_custom.SiteUserExtend'
+
+USER_LINK = lambda uid: '/user/{0}'.format(uid)
 
 try:
     from local_settings import *

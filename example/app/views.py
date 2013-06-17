@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -42,3 +43,6 @@ def account_settings(request):
     return render_to_response(
         'account_settings.html', context_instance=RequestContext(request)
     )
+
+def _test(request, *args, **kwargs):
+    return HttpResponse("here")
