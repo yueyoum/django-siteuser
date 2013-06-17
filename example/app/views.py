@@ -4,10 +4,11 @@ from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from socialoauth import SocialSites
 from siteuser.users.models import SiteUser
 from siteuser import settings as siteuser_settings
 
+if siteuser_settings.USING_SOCIAL_LOGIN:
+    from socialoauth import SocialSites
 
 def home(request):
     if siteuser_settings.USING_SOCIAL_LOGIN:

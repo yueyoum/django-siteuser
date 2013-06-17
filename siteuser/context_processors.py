@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from socialoauth import SocialSites
 from siteuser.utils import LazyList
-from siteuser.settings import SOCIALOAUTH_SITES
+from siteuser.settings import USING_SOCIAL_LOGIN, SOCIALOAUTH_SITES
+
+if USING_SOCIAL_LOGIN:
+    from socialoauth import SocialSites
 
 # add 'siteuser.context_processors.social_sites' in TEMPLATE_CONTEXT_PROCESSORS
 # then in template, you can get this sites via {% for s in social_sites %} ... {% endfor %}

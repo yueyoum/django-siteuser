@@ -11,11 +11,11 @@ from django.shortcuts import render_to_response
 from django.template import loader, RequestContext
 from django.views.generic import View
 
-from socialoauth import SocialSites, SocialAPIError, SocialSitesConfigError
 
 from siteuser.users.models import InnerUser, SiteUser, SocialUser
 from siteuser.functional import send_mail_convenient
 from siteuser.settings import (
+    USING_SOCIAL_LOGIN,
     MAX_EMAIL_LENGTH,
     MAX_USERNAME_LENGTH,
     SOCIALOAUTH_SITES,
@@ -24,6 +24,8 @@ from siteuser.settings import (
 )
 from siteuser.utils.load_user_define import user_defined_mixin
 
+if USING_SOCIAL_LOGIN:
+    from socialoauth import SocialSites, SocialAPIError, SocialSitesConfigError
 
 # 注册，登录，退出等都通过 ajax 的方式进行
 
