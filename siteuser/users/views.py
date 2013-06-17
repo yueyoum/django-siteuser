@@ -4,7 +4,6 @@ import json
 import hashlib
 from functools import wraps
 
-from django.conf import settings
 from django.core import signing
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -23,6 +22,7 @@ from siteuser.settings import (
     SOCIAL_LOGIN_DONE_REDIRECT_URL,
     SOCIAL_LOGIN_ERROR_REDIRECT_URL,
 )
+from siteuser.utils.load_user_define import user_defined_mixin
 
 
 # 注册，登录，退出等都通过 ajax 的方式进行
@@ -118,18 +118,6 @@ class SiteUserMixIn(object):
         return referer
 
 
-class UserNotDefined(object):pass
-
-def user_defined_mixin():
-    mixin = getattr(settings, 'SITEUSER_ACCOUNT_MIXIN', UserNotDefined)
-    if mixin is object:
-        raise AttributeError("Invalid SITEUSER_ACCOUNT_MIXIN")
-    if isinstance(mixin, type):
-        return mixin
-
-    _module, _class = mixin.rsplit('.', 1)
-    m = __import__(_module, fromlist=['.'])
-    return getattr(m, _class)
 
 
 class SiteUserLoginView(user_defined_mixin(), SiteUserMixIn, View):
