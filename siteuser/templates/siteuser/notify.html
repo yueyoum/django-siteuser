@@ -6,9 +6,11 @@
         {% for n in notifies %}
             <tr {% if not n.has_read %}class="info"{% endif %}>
                 <td><a href="" target="_blank">{{ n.sender.username }}</a></td>
-                <td class="muted">在</td>
-                <td><a href="{% url 'siteuser_notify_confirm' notify_id=n.id %}" target="_blank">{{ n.text }}</a></td>
-                <td class="muted">中回复了你</td>
+                <td>
+                    <span class="muted">在</span>
+                    <a href="{% url 'siteuser_notify_confirm' notify_id=n.id %}" target="_blank">{{ n.text }}</a>
+                    <span class="muted">中回复了你</span>
+                </td>
                 <td class="muted">{{ n.notify_at }}</td>
             </tr>
         {% endfor %}

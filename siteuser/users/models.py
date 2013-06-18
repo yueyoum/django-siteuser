@@ -15,6 +15,22 @@ from siteuser.settings import (
 
 from siteuser.upload_avatar.signals import avatar_crop_done
 
+"""
+siteuser的核心，
+    SocialUser - 保存第三方帐号
+    InnerUser  - 网站自身注册用户
+    SiteUser   - 用户信息表
+
+目前 SocialUser, InnerUser 都不支持扩展，方法直接写死。
+这种在只支持第三方登录的应用情况下，是够用的。
+
+SiteUser 之定义了最基本的数据，用户可以自由的扩展字段。
+需要注意的是， SiteUser中的 username 不能设置为 unique = True
+因为第三方社交帐号的username也保存在这个表里，
+然而不同社交站点的用户完全有可能重名。
+"""
+
+
 
 class SiteUserManager(models.Manager):
     def create(self, is_social, **kwargs):
@@ -104,7 +120,7 @@ class SiteUser(_siteuser_extend()):
     avatar_name = models.CharField(max_length=64, blank=True)
 
     def __unicode__(self):
-        return u'<SiteUser %d>' % self.id
+        return u'<SiteUser %d, %s>' % (self.id, self.username)
 
     @property
     def avatar(self):
@@ -135,4 +151,3 @@ def _save_avatar_in_db(sender, uid, avatar_name, **kwargs):
 
 
 avatar_crop_done.connect(_save_avatar_in_db)
-

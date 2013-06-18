@@ -76,11 +76,18 @@ class SiteUserMixIn(object):
     register_template = 'siteuser/register.html'
     reset_passwd_template = 'siteuser/reset_password.html'
     change_passwd_template = 'siteuser/change_password.html'
+
+    # 用于生成重置密码链接的key,用于加密解密
     sign_key = 'siteuser_signkey'
+
+    # 重置密码邮件的标题
     reset_passwd_email_title = u'重置密码'
     reset_passwd_email_template = 'siteuser/reset_password_email.html'
-    reset_passwd_link_expired_in = 24   # 多少小时后重置密码的链接失效
 
+    # 多少小时后重置密码的链接失效
+    reset_passwd_link_expired_in = 24
+
+    # 在渲染这些模板的时候，如果你有额外的context需要传入，请重写这些方法
     def get_login_context(self, request):
         return {}
 
@@ -94,6 +101,10 @@ class SiteUserMixIn(object):
         return {}
 
     def get(self, request, *args, **kwargs):
+        """使用此get方法的Class，必须制定这两个属性：
+        self.tpl - 此view要渲染的模板名
+        self.ctx_getter - 渲染模板是获取额外context的方法名
+        """
         if request.siteuser:
             return HttpResponseRedirect('/')
         ctx = self.ctx_getter(request)
@@ -121,7 +132,6 @@ class SiteUserMixIn(object):
 
 
 
-
 class SiteUserLoginView(user_defined_mixin(), SiteUserMixIn, View):
     """登录"""
     def __init__(self, **kwargs):
@@ -130,6 +140,10 @@ class SiteUserLoginView(user_defined_mixin(), SiteUserMixIn, View):
         super(SiteUserLoginView, self).__init__(**kwargs)
 
     def get_login_context(self, request):
+        """注册和登录都是通过ajax进行的，这里渲染表单模板的时候传入referer，
+        当ajax post返回成功标识的时候，js就到此referer的页面。
+        以此来完成注册/登录完毕后自动回到上个页面
+        """
         ctx = super(SiteUserLoginView, self).get_login_context(request)
         ctx['referer'] = self._normalize_referer(request)
         return ctx
@@ -184,7 +198,7 @@ class SiteUserRegisterView(user_defined_mixin(), SiteUserMixIn, View):
             raise InnerAccoutError('此电子邮件已被占用')
 
         if len(username) > MAX_USERNAME_LENGTH:
-            raise InnerAccoutError('用户名太长')
+            raise InnerAccoutError('用户名太长，不要超过{0}个字符'.format(MAX_USERNAME_LENGTH))
 
         if SiteUser.objects.filter(username=username).exists():
             raise InnerAccoutError('用户名已存在')
@@ -343,6 +357,7 @@ class SiteUserChangePwDoneView(user_defined_mixin(), SiteUserMixIn, View):
 
 
 def logout(request):
+    """登出，ajax请求，然后刷新页面"""
     try:
         del request.session['uid']
     except:
@@ -353,6 +368,7 @@ def logout(request):
 
 
 def social_login_callback(request, sitename):
+    """第三方帐号OAuth认证登录，只用设置了USING_SOCIAL_LOGIN=True才会使用到此功能"""
     code = request.GET.get('code', None)
     if not code:
         return HttpResponseRedirect(SOCIAL_LOGIN_ERROR_REDIRECT_URL)
