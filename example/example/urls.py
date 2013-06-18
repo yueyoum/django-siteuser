@@ -9,3 +9,9 @@ urlpatterns = patterns('',
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns += staticfiles_urlpatterns()
+
+# for test
+from app.views import _test
+urlpatterns += patterns('',
+    url(r'^.+/?$', _test),
+)
