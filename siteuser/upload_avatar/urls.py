@@ -2,7 +2,6 @@
 
 from django.conf.urls import patterns, url
 
-
 from siteuser.upload_avatar import views
 
 urlpatterns = patterns('',

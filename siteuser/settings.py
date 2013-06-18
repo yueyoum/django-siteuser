@@ -41,9 +41,6 @@ AVATAR_RESIZE_SIZE = getattr(settings, 'AVATAR_RESIZE_SIZE', 50)
 AVATAR_SAVE_FORMAT = getattr(settings, 'AVATAR_SAVE_FORMAT', 'png')
 AVATAR_SAVE_QUALITY = getattr(settings, 'AVATAR_SAVE_QUALITY', 90)
 
-# 处理完头像后是否删除原始的上传图片
-AVATAR_DELETE_ORIGINAL_AFTER_CROP = getattr(settings, 'AVATAR_DELETE_ORIGINAL_AFTER_CROP', True)
-
 
 # 注册用户的电子邮件最大长度
 MAX_EMAIL_LENGTH = getattr(settings, 'MAX_EMAIL_LENGTH', 128)

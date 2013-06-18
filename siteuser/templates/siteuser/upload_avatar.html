@@ -12,26 +12,26 @@
     </form>
     
     <div id="uploadAvatarUploadArea">
-        <form id="uploadAvatarForm" action="{% url 'uploadavatar_upload' %}" method="post" target="uploadAvatarIframe" enctype="multipart/form-data">
+        <form class="form" id="uploadAvatarForm" action="{% url 'uploadavatar_upload' %}" method="post" target="uploadAvatarIframe" enctype="multipart/form-data">
             {% csrf_token %}
+            <label>选择图片</label>
             <input type="file" id="uploadAvatarInputFile" name="uploadavatarfile" />
-            <button type="submit" class="btn">上传</button>
         </form>
     </div>
     <iframe id="uploadAvatarIframe" name="uploadAvatarIframe" style="display: none;"></iframe>
     
-    <div id="uploadAvatarSelectArea" style="width: 300px; height: 300px; border: 1px solid #ddd;"></div>
-    <div id="uploadAvatarPreviewArea">
-        <p>预览</p>
-        <div id="uploadAvatarPreviewArea50" style="width: 50px; height: 50px; border: 1px solid #ddd; overflow: hidden;"></div>
-        <div id="uploadAvatarPreviewArea120" style="width: 120px; height: 120px; border: 1px solid #ddd; overflow: hidden;"></div>
+    <div class="row">
+        <div class="span6" id="uploadAvatarSelectArea" style="width: 300px; height: 300px; border: 1px solid #ddd;"></div>
+        <div class="span6" id="uploadAvatarPreviewArea">
+            <p class="muted">预览</p>
+            <div id="uploadAvatarPreviewArea50" style="width: 50px; height: 50px; border: 1px solid #ddd; overflow: hidden; margin-bottom: 10px;"></div>
+            <div id="uploadAvatarPreviewArea120" style="width: 120px; height: 120px; border: 1px solid #ddd; overflow: hidden;"></div>
+        </div>
     </div>
     
-    <div style="clear: both;"></div>
-    
-    <div id="uploadAvatarBtns">
-        <button class="btn" id="uploadAvatarCropSubmit" disabled="disabled">保存</button>
+    <div id="uploadAvatarBtns" style="margin: 10px 0;">
+        <button class="btn btn-primary" id="uploadAvatarCropSubmit" disabled="disabled">保存</button>
     </div>
-    
-    <div id="uploadAvatarCropResult"></div>
+
+    <div id="uploadAvatarCropResult" class="alert alert-error" style="display: none;"></div>
 </div>

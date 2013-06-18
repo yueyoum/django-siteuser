@@ -44,10 +44,12 @@ $(function () {
     });
 });
 
-function upload_avatar_error(error_msg) { window.alert(error_msg); }
+function upload_avatar_error(msg) {
+    $("#uploadAvatarCropResult").hide(100).removeClass('alert-success').addClass('alert-error').text(msg).show(200);
+}
 
 function crop_avatar_success(msg) {
-    $('#uploadAvatarCropResult').hide().text(msg).show(200);
+    $("#uploadAvatarCropResult").hide(100).removeClass('alert-error').addClass('alert-success').text(msg).show(200);
 }
 
 function updatePreview50(img, selection) {

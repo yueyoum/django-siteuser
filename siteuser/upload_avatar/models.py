@@ -34,4 +34,3 @@ def _delete_avatar_on_disk(sender, instance, *args, **kwargs):
 
 
 post_delete.connect(_delete_avatar_on_disk, sender=UploadedImage)
-

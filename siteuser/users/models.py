@@ -120,6 +120,10 @@ def _save_avatar_in_db(sender, uid, avatar_name, **kwargs):
         return
 
     old_avatar_name = SiteUser.objects.get(id=uid).avatar_name
+    if old_avatar_name == avatar_name:
+        # 上传一张图片后，连续剪裁的情况
+        return
+
     if old_avatar_name:
         _path = os.path.join(AVATAR_DIR, old_avatar_name)
         try:

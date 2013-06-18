@@ -18,11 +18,17 @@ from siteuser.settings import (
     AVATAR_RESIZE_SIZE,
     AVATAR_SAVE_FORMAT,
     AVATAR_SAVE_QUALITY,
-    AVATAR_DELETE_ORIGINAL_AFTER_CROP,
 )
 
 from siteuser.upload_avatar.signals import avatar_upload_done, avatar_crop_done
 from siteuser.upload_avatar.models import UploadedImage
+
+"""
+用户上传图片分三步：
+    1.  上传一张图片，服务器将其保存起来，并且把url返回给浏览器
+    2.  浏览器在预览区域显示这张图片，然后加载js库来剪裁图片。
+    3.  其实js库只是获取了选框四个顶点对应于图片的坐标，然后还要将这个坐标发送到服务器，服务器剪裁图片
+"""
 
 border_size = 300
 
@@ -91,7 +97,7 @@ def upload_avatar(request):
         _obj.save()
     else:
         UploadedImage.objects.create(uid=get_uid(request), image=new_name)
-        
+
     # 上传完毕
     avatar_upload_done.send(sender=None,
                             uid=get_uid(request),
@@ -162,10 +168,6 @@ def crop_avatar(request):
                           dispatch_uid = 'siteuser_avatar_crop_done'
                           )
 
-    if AVATAR_DELETE_ORIGINAL_AFTER_CROP:
-        upim.delete()
-
     return HttpResponse(
         "<script>window.parent.crop_avatar_success('%s')</script>"  % '成功'
     )
-
