@@ -122,6 +122,8 @@
                 }
             );
         });
+        
+        get_notifies();
 
     });
 
@@ -145,23 +147,26 @@
         $.ajax(
             {
                 type: 'GET',
-                url: '/notifies',
+                url: '/notifies.json/',
                 data: {},
                 dateType: 'json',
                 async: true,
                 success: function(data){
                     if(data.length>0) {
-                        var len = data.length >= 100 ? '99+' : data.length;
-                        $('#notifya span').text(len);
-                        var $ul = $('#notifya').next();
+                        var len = data.length > 10 ? '9+' : data.length;
+                        $('#siteuserNotify').text(len);
+                        var $ul = $('<ul/>');
+                        $ul.attr('id', 'siteusernotifyul');
                         data.forEach(function(item){
-                            var $li = $('<li class="link" />');
+                            var $li = $('<li/>');
                             $li.append(item);
                             $li.appendTo($ul);
                         });
-                        bind_noify_click_event();
+                        $('#siteuserNotify').after($ul);
+                        bind_notify_click_event();
                     }
                     else {
+                        $('#siteuserNotify').text(0);
                     }
                 },
                 error: function(XmlHttprequest, textStatus, errorThrown){
@@ -170,31 +175,11 @@
         );
     }
 
-
-    function bind_noify_click_event() {
-        $('a.notifyme').click(function(){
-            var nid = $(this).attr('noti-id');
-            $.ajax(
-                {
-                    type: 'POST',
-                    url: '/notify/confirm',
-                    data: {
-                        nid: nid,
-                        csrfmiddlewaretoken: get_csrf()
-                    },
-                    dateType: 'json',
-                    async: false,
-                    success: function(data){
-                        return true;
-                    },
-                    error: function(XmlHttprequest, textStatus, errorThrown){
-                        return true;
-                    }
-                }
-            );
+    function bind_notify_click_event() {
+        $('#siteusernotifyul>li>a:odd').click(function(){
+            $(this).parent().hide();
         });
     }
-
 
 })(window, jQuery);
 

@@ -39,9 +39,12 @@
     {% else %}
         <h2>No users</h2>
     {% endif %}
-    <hr />
-    <h1>
+    
+    <div>
         {% if request.siteuser %}
+            通知
+            <span id="siteuserNotify"></span>
+            <br/>
             {% if not request.siteuser.is_social %}
             <a href="{% url "account_settings" %}">Settings</a>
             {% endif %}
@@ -50,5 +53,5 @@
             <a href="{% url "siteuser_login" %}">Login</a>
             <a href="{% url "siteuser_register" %}">Register</a>
         {% endif %}
-    </h1>
+    </div>
 {% endblock  %}
