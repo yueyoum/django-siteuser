@@ -24,9 +24,9 @@
 
 #### 安装
 
-    ```bash
-    pip install django-siteuser
-    ```
+```bash
+pip install django-siteuser
+```
 
 同时会安装此项目的依赖：
 
@@ -37,27 +37,28 @@
 
 ####  在你的模板中引入必要的js文件
 
-    ```html
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/siteuser.js"></script>
-    ```
+```html
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/siteuser.js"></script>
+```
 
 
 #### 设置settings.py文件
 
-*   首先设置按照 ![django-celery](https://github.com/celery/django-celery)
+*   首先设置 ![django-celery](https://github.com/celery/django-celery)
 
 *   将 `siteuser` 加入到 `INSTALLED_APPS` 中
     ```python
     INSTALLED_APPS = (
         # ...
+        'djcelery',
         'siteuser.users',
         'siteuser.upload_avatar',
         'siteuser.notify',
     )
     ```
 
-    `siteuser.users` 为必须添加的app，另外两个一个用于上传头像，一个是简单的通知系统，可以不添加
+    `siteuser.users` 为 **必须添加** 的app，另外两个一个用于上传头像，一个是简单的通知系统，**可以不添加**
 
 
 *   将 `siteuser.SITEUSER_TEMPLATE` 加入 `TEMPLATE_DIRS`
