@@ -7,7 +7,6 @@ recursive-include siteuser/upload_avatar/static *
 recursive-include siteuser/users/static *
 recursive-include example *
 recursive-exclude example/avatar *
-recursive-exclude example/static *
 recursive-exclude * *.pyc
 exclude example/test.db
 exclude example/example/local_settings.py

@@ -1,8 +1,11 @@
-from distutils.core import setup
-from setuptools import find_packages
+from setuptools import setup, find_packages
 
 from siteuser import VERSION
 
+install_requires = [
+    'socialoauth',
+    'django-celery',
+]
 
 setup(
     name='django-siteuser',
@@ -15,6 +18,8 @@ setup(
     url = 'https://github.com/yueyoum/django-siteuser',
     keywords = 'django, account, login, register, social, avatar',
     packages = find_packages(exclude=('example',)),
+    install_requires = install_requires,
+    include_package_data = True,
     classifiers = [
         'Development Status :: 4 - Beta',
         'Topic :: Internet',
@@ -23,4 +28,3 @@ setup(
         'Programming Language :: Python',
     ],
 )
-
