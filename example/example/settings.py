@@ -4,6 +4,9 @@ CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 EXAMPLE_PATH = os.path.dirname(CURRENT_PATH)
 PROJECT_PATH = os.path.dirname(EXAMPLE_PATH)
 
+import djcelery
+djcelery.setup_loader()
+
 try:
     import siteuser
 except ImportError:
@@ -144,6 +147,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'djcelery',
     'app',
     'siteuser.users',
     'siteuser.upload_avatar',
@@ -178,6 +182,9 @@ LOGGING = {
         },
     }
 }
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 USING_SOCIAL_LOGIN = False
 AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'avatar')

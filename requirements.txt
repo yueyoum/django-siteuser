@@ -1,0 +1,3 @@
+socialoauth
+redis
+django-celery

@@ -13,7 +13,7 @@ from django.views.generic import View
 
 
 from siteuser.users.models import InnerUser, SiteUser, SocialUser
-from siteuser.functional import send_mail_convenient
+from siteuser.users.tasks import send_mail
 from siteuser.settings import (
     USING_SOCIAL_LOGIN,
     MAX_EMAIL_LENGTH,
@@ -237,9 +237,9 @@ class SiteUserResetPwStepOneView(user_defined_mixin(), SiteUserMixIn, View):
             'link': link
         }
         body = loader.render_to_string(self.reset_passwd_email_template, context)
-        # TODO 异步发送邮件
+        # 异步发送邮件
         body = unicode(body)
-        send_mail_convenient(email, self.reset_passwd_email_title, body)
+        send_mail.delay(email, self.reset_passwd_email_title, body)
         return HttpResponseRedirect(reverse('siteuser_reset_step1_done'))
 
 
