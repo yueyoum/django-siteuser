@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 
+SITEUSER_EMAIL = {
+    'smtp_host': 'smtp.gmail.com',
+    'smtp_port': 25,
+    'username': 'xxx',
+    'password': 'xxx',
+    'from': 'xxx@gmail.com',
+    'display_from': '',
+}
+
 SOCIALOAUTH_SITES = (
     ('renren', 'socialoauth.sites.renren.RenRen', '人人',
         {

@@ -89,6 +89,7 @@ pip install django-siteuser
         ```
 
     *   将此model的定义写在其他文件中，然后在settings.py中指定。
+
     
     `example`使用的第二种，具体可以查看`example`项目.
 
@@ -122,6 +123,19 @@ pip install django-siteuser
     *   第二中方法是将此Mixin定义在一个文件中，然后在settings.py中指定
     
     `example`使用的第二种，具体可以查看`example`项目.
+
+
+*   `SITEUSER_EMAIL`
+
+    siteuser自己写了发邮件的方法，所以也没使用Django自己的EMAI设置
+    所以你需要设置`SITEUSER_EMAIL`, 见 ![local_settings.py.example](/example/example/local_settings.py.example)
+
+    其中需要说明的是 `display_from` 这个设置，
+    如果你没有自己架设SMTP SERVER，也没有购买发送邮件的服务，
+    而是直接在gmail, 163, sohu等email提供商那儿免费申请了个邮箱，
+    那么你的邮箱肯定是 name@gmail.com这种形式的。
+    这时候如果你想在别人的收件箱里显示 `abc@def.com` 
+    那么就把 `display_from` 设置成此值。如果不设置，那么默认就是`from`
 
 
 #### 模板
