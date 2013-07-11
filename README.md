@@ -30,8 +30,8 @@ pip install django-siteuser
 
 同时会安装此项目的依赖：
 
-*   ![socialoauth](https://github.com/yueyoum/social-oauth) - 第三方登录
-*   ![django-celery](https://github.com/celery/django-celery) - 异步发送邮件
+*   [socialoauth](https://github.com/yueyoum/social-oauth) - 第三方登录
+*   [django-celery](https://github.com/celery/django-celery) - 异步发送邮件
 
 
 
@@ -45,7 +45,7 @@ pip install django-siteuser
 
 #### 设置settings.py文件
 
-*   首先设置 ![django-celery](https://github.com/celery/django-celery)
+*   首先设置 [django-celery](https://github.com/celery/django-celery)
 
 *   将 `siteuser` 加入到 `INSTALLED_APPS` 中
     ```python
@@ -71,10 +71,10 @@ pip install django-siteuser
 *   将 `url(r'', include('siteuser.urls'))` 加入到项目的 `urls.py` 
 *   `AVATAR_DIR` - 告诉siteuser将上传的头像放置到哪个位置
 *   `USING_SOCIAL_LOGIN` 是否开启第三方帐号登录功能。**若不设置，默认为 False**
-*   `SOCIALOAUTH_SITES` - 仅在 `USING_SOCIAL_LOGIN`为True的情况下需要设置。第三方登录所需的配置。![见socialoauth文档](https://github.com/yueyoum/social-oauth/blob/master/doc.md#-settingspy)
+*   `SOCIALOAUTH_SITES` - 仅在 `USING_SOCIAL_LOGIN`为True的情况下需要设置。第三方登录所需的配置。[见socialoauth文档](https://github.com/yueyoum/social-oauth/blob/master/doc.md#-settingspy)
 *   `SITEUSER_EXTEND_MODEL`
     不设置此项，example一样可以运行，但实际项目中，肯定会根据项目本身来设定用户字段.
-    默认的字段请查看 ![SiteUser](/siteuser/users/models.py#L108).
+    默认的字段请查看 [SiteUser](/siteuser/users/models.py#L108).
     
     支持两种方式来扩展SiteUser字段
     *   直接在`settings.py`中定义
@@ -118,7 +118,7 @@ pip install django-siteuser
         ```
         
         这两个方法正如其名，request是django传递给view的request，你在这里返回需要传递到模板中的context即可
-        在这里查看默认的 ![SiteUserMixIn](/siteuser/users/views.py#L73)
+        在这里查看默认的 [SiteUserMixIn](/siteuser/users/views.py#L73)
         
     *   第二中方法是将此Mixin定义在一个文件中，然后在settings.py中指定
     
@@ -128,7 +128,7 @@ pip install django-siteuser
 *   `SITEUSER_EMAIL`
 
     siteuser自己写了发邮件的方法，所以也没使用Django自己的EMAI设置
-    所以你需要设置`SITEUSER_EMAIL`, 见 ![local_settings.py.example](/example/example/local_settings.py.example)
+    所以你需要设置`SITEUSER_EMAIL`, 见 [local_settings.py.example](/example/example/local_settings.py.example)
 
     其中需要说明的是 `display_from` 这个设置，
     如果你没有自己架设SMTP SERVER，也没有购买发送邮件的服务，
