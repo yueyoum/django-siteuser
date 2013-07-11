@@ -74,7 +74,7 @@ def upload_avatar(request):
     fpath = os.path.join(AVATAR_UPLOAD_DIR, new_name)
 
     try:
-        with open(fpath, 'w') as f:
+        with open(fpath, 'wb') as f:
             for c in uploaded_file.chunks(10240):
                 f.write(c)
     except IOError:
