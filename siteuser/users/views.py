@@ -382,7 +382,7 @@ def social_login_callback(request, sitename):
 
     try:
         user = SocialUser.objects.get(site_uid=site.uid, site_name=site.site_name)
-        SiteUser.objects.filter(id=user.id).update(username=site.name, avatar_url=site.avatar)
+        SiteUser.objects.filter(id=user.user.id).update(username=site.name, avatar_url=site.avatar)
     except SocialUser.DoesNotExist:
         user = SocialUser.objects.create(
             site_uid=site.uid,
