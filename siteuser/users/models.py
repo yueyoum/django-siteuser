@@ -87,7 +87,7 @@ def _siteuser_extend():
     if isinstance(siteuser_extend_model, models.base.ModelBase):
         # 直接定义的 SITEUSER_EXTEND_MODEL
         if not siteuser_extend_model._meta.abstract:
-            raise AttributeError("%s must be an abstract model" % siteuser_extend_model)
+            raise AttributeError("%s must be an abstract model" % siteuser_extend_model.__name__)
         return siteuser_extend_model
 
     # 以string的方式定义的 SITEUSER_EXTEND_MODEL

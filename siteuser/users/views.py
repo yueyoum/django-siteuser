@@ -368,7 +368,7 @@ def logout(request):
 
 
 def social_login_callback(request, sitename):
-    """第三方帐号OAuth认证登录，只用设置了USING_SOCIAL_LOGIN=True才会使用到此功能"""
+    """第三方帐号OAuth认证登录，只有设置了USING_SOCIAL_LOGIN=True才会使用到此功能"""
     code = request.GET.get('code', None)
     if not code:
         return HttpResponseRedirect(SOCIAL_LOGIN_ERROR_REDIRECT_URL)
@@ -380,6 +380,9 @@ def social_login_callback(request, sitename):
     except(SocialSitesConfigError, SocialAPIError):
         return HttpResponseRedirect(SOCIAL_LOGIN_ERROR_REDIRECT_URL)
 
+    # 首先根据site_name和site uid查找此用户是否已经在自身网站认证，
+    # 如果查不到，表示这个用户第一次认证登陆，创建新用户记录
+    # 如果查到，就跟新其用户名和头像
     try:
         user = SocialUser.objects.get(site_uid=site.uid, site_name=site.site_name)
         SiteUser.objects.filter(id=user.user.id).update(username=site.name, avatar_url=site.avatar)
