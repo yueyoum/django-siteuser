@@ -1,3 +1,10 @@
+2012-07-18
+
+*   Version 0.1.2
+*   Fix open file mode from 'w' to 'wb', For windows compatibility
+*   Fix updating Social User's name and avatar. Thanks for Leejaen <https://github.com/leejaen>
+
+
 2012-06-21
 
 *   Version 0.1.0, First release

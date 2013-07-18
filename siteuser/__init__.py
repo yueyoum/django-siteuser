@@ -2,7 +2,7 @@
 
 import os
 
-version_info = (0, 1, 0)
+version_info = (0, 1, 2)
 VERSION = __version__ = '.'.join( map(str, version_info) )
 
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
