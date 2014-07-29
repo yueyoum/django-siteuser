@@ -16,3 +16,4 @@ def login_needed(login_url=None):
 
             return func(request, *args, **kwargs)
         return wrap
+    return deco
