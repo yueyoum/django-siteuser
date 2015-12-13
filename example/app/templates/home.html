@@ -48,7 +48,7 @@
             {% if not request.siteuser.is_social %}
             <a href="{% url "account_settings" %}">Settings</a>
             {% endif %}
-            <a href="#" id="siteuserLogout">Logout</a>
+            <a href="{% url "siteuser_logout" %}">Logout</a>
         {% else %}
             <a href="{% url "siteuser_login" %}">Login</a>
             <a href="{% url "siteuser_register" %}">Register</a>

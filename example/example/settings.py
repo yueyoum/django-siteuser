@@ -187,7 +187,7 @@ BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 USING_SOCIAL_LOGIN = False
-AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'avatar')
+AVATAR_DIR = os.path.join(EXAMPLE_PATH, 'app/static/avatar')
 
 SITEUSER_ACCOUNT_MIXIN = 'app.siteuser_custom.AccountMixIn'
 SITEUSER_EXTEND_MODEL = 'app.siteuser_custom.SiteUserExtend'
@@ -198,3 +198,12 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+SITEUSER_EMAIL = {
+    'smtp_host': 'smtp.gmail.com',
+    'smtp_port': 25,
+    'username': 'xxx',
+    'password': 'xxx',
+    'from': 'xxx@gmail.com',
+    'display_from': '',
+}

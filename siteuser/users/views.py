@@ -39,7 +39,7 @@ make_password = lambda passwd: hashlib.sha1(passwd).hexdigest()
 def inner_account_ajax_guard(func):
     @wraps(func)
     def deco(self, request, *args, **kwargs):
-        dump = lambda d: HttpResponse(json.dumps(d), mimetype='application/json')
+        dump = lambda d: HttpResponse(json.dumps(d), content_type='application/json')
         if request.siteuser:
             return dump({'ok': False, 'msg': '你已登录'})
 
@@ -363,7 +363,7 @@ def logout(request):
     except:
         pass
 
-    return HttpResponse('', mimetype='application/json')
+    return HttpResponse('', content_type='application/json')
 
 
 
